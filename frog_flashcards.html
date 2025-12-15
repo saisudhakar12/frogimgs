@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Frog Flashcards</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f5;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50; /* Frog green */
+        }
+
+        /* Container for all flashcards */
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        /* Flashcard structure */
+        .flashcard {
+            width: 300px;
+            height: 400px;
+            perspective: 1000px; /* For 3D flip effect */
+            cursor: pointer;
+        }
+
+        /* Inner card (controls the flip) */
+        .inner-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        /* State for flipped card */
+        .flashcard.flipped .inner-card {
+            transform: rotateY(180deg);
+        }
+
+        /* Front and Back common styling */
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Important for 3D flip */
+            border-radius: 15px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Front side specific styling */
+        .card-front {
+            background-color: #e8f5e9; /* Light green */
+        }
+
+        .card-front img {
+            max-width: 90%;
+            max-height: 70%;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 3px solid #66bb6a;
+        }
+
+        .card-front h3 {
+            color: #388e3c;
+            margin-bottom: 0;
+        }
+
+        /* Back side specific styling */
+        .card-back {
+            background-color: #a5d6a7; /* Darker green */
+            transform: rotateY(180deg);
+        }
+
+        .card-back h3 {
+            color: #1b5e20;
+            font-size: 1.5em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Click to Flip: Frog Flashcards</h1>
+
+    <div class="cards-container">
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="red_eyed_frog.jpg" alt="Red-eyed Tree Frog">
+                    <h3>Red-eyed Tree Frog</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Red-eyed Tree Frog</h3>
+					<p> found in rain forest
+					found in from Southern Mexico, through Central America (like Costa Rica, Panama, Honduras, Nicaragua),
+					and into northern South America (Colombia)</p>
+					<h4>follows the same metamorphosis</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="poison_dart_frog.jpg" alt="Poison Dart Frog">
+                    <h3>Poison Dart Frog</h3>
+
+                </div>
+                <div class="card-face card-back">
+                    <h3>Poison Dart Frog</h3>
+					<h4> found in rain forest</h4>
+					<h4>found in india</h4>
+					<h4>follows the same metamorphosis</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="desert_rain_frog.jpg" alt="Desert Rain Frog">
+                    <h3>Desert Rain Frog</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Desert Rain Frog</h3>
+					<h4> found in deserts</h4>
+					<h4>found in namibia</h4>
+					<h4> the tadpole grows on land </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="glass_frog.jpg" alt="Glass Frog">
+                    <h3>Glass Frog</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Glass Frog</h3>
+					<h4> found in rain forest</h4>
+					<h4>found in india</h4>
+					<h4>follows the same metamorphosis</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="bull_frog.jpg" alt="Bull Frog">
+                    <h3>Bull Frog</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Bull Frog</h3>
+					<h4> not found in rain forest</h4>
+					<h4>found in india</h4>
+					<h4>follows the same metamorphosis</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="inner-card">
+                <div class="card-face card-front">
+                    <img src="wood_frog.jpg" alt="Wood Frog">
+                    <h3>Wood Frog</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Wood Frog</h3>
+					<h4> found in polar region</h4>
+					<h4>found at the poles</h4>
+					<h4>follows the same metamorphosis</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
