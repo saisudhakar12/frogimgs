@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>118 Elements MCQ Quiz</title>
+    <style>
+        :root { --primary: #4f46e5; --success: #10b981; --danger: #ef4444; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 600px; }
+        h2 { color: #1e293b; margin-top: 0; }
+        .option-label { display: block; background: #f1f5f9; padding: 12px; margin: 8px 0; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .option-label:hover { background: #e2e8f0; }
+        input[type="radio"] { margin-right: 10px; }
+        input[type="radio"]:checked + span { font-weight: bold; color: var(--primary); }
+        .selected-border { border-color: var(--primary); background: #eef2ff; }
+        .controls { display: flex; gap: 15px; margin-top: 25px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        #next-btn { background: var(--success); }
+        #end-btn { background: var(--danger); }
+        .hidden { display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        th { background: #f8fafc; }
+        .res-correct { color: var(--success); font-weight: bold; }
+        .res-wrong { color: var(--danger); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="quiz-box">
+        <h2 id="question">Loading...</h2>
+        <div id="options-container"></div>
+        <div class="controls">
+            <button id="next-btn" onclick="handleNext()">Next Question</button>
+            <button id="end-btn" onclick="handleEnd()">End Quiz</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="hidden">
+        <h2>Quiz Results</h2>
+        <p id="score-text"></p>
+        <table id="result-table">
+            <thead>
+                <tr>
+                    <th>Element</th>
+                    <th>Your Answer</th>
+                    <th>Correct</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <button onclick="location.reload()" style="background: var(--primary); margin-top: 20px;">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    const elements = [
+        {n:"Hydrogen", s:"H", a:1}, {n:"Helium", s:"He", a:2}, {n:"Lithium", s:"Li", a:3}, {n:"Beryllium", s:"Be", a:4}, {n:"Boron", s:"B", a:5}, {n:"Carbon", s:"C", a:6}, {n:"Nitrogen", s:"N", a:7}, {n:"Oxygen", s:"O", a:8}, {n:"Fluorine", s:"F", a:9}, {n:"Neon", s:"Ne", a:10},
+        {n:"Sodium", s:"Na", a:11}, {n:"Magnesium", s:"Mg", a:12}, {n:"Aluminum", s:"Al", a:13}, {n:"Silicon", s:"Si", a:14}, {n:"Phosphorus", s:"P", a:15}, {n:"Sulfur", s:"S", a:16}, {n:"Chlorine", s:"Cl", a:17}, {n:"Argon", s:"Ar", a:18}, {n:"Potassium", s:"K", a:19}, {n:"Calcium", s:"Ca", a:20},
+        {n:"Scandium", s:"Sc", a:21}, {n:"Titanium", s:"Ti", a:22}, {n:"Vanadium", s:"V", a:23}, {n:"Chromium", s:"Cr", a:24}, {n:"Manganese", s:"Mn", a:25}, {n:"Iron", s:"Fe", a:26}, {n:"Cobalt", s:"Co", a:27}, {n:"Nickel", s:"Ni", a:28}, {n:"Copper", s:"Cu", a:29}, {n:"Zinc", s:"Zn", a:30},
+        {n:"Gallium", s:"Ga", a:31}, {n:"Germanium", s:"Ge", a:32}, {n:"Arsenic", s:"As", a:33}, {n:"Selenium", s:"Se", a:34}, {n:"Bromine", s:"Br", a:35}, {n:"Krypton", s:"Kr", a:36}, {n:"Rubidium", s:"Rb", a:37}, {n:"Strontium", s:"Sr", a:38}, {n:"Yttrium", s:"Y", a:39}, {n:"Zirconium", s:"Zr", a:40},
+        {n:"Niobium", s:"Nb", a:41}, {n:"Molybdenum", s:"Mo", a:42}, {n:"Technetium", s:"Tc", a:43}, {n:"Ruthenium", s:"Ru", a:44}, {n:"Rhodium", s:"Rh", a:45}, {n:"Palladium", s:"Pd", a:46}, {n:"Silver", s:"Ag", a:47}, {n:"Cadmium", s:"Cd", a:48}, {n:"Indium", s:"In", a:49}, {n:"Tin", s:"Sn", a:50},
+        {n:"Antimony", s:"Sb", a:51}, {n:"Tellurium", s:"Te", a:52}, {n:"Iodine", s:"I", a:53}, {n:"Xenon", s:"Xe", a:54}, {n:"Cesium", s:"Cs", a:55}, {n:"Barium", s:"Ba", a:56}, {n:"Lanthanum", s:"La", a:57}, {n:"Cerium", s:"Ce", a:58}, {n:"Praseodymium", s:"Pr", a:59}, {n:"Neodymium", s:"Nd", a:60},
+        {n:"Promethium", s:"Pm", a:61}, {n:"Samarium", s:"Sm", a:62}, {n:"Europium", s:"Eu", a:63}, {n:"Gadolinium", s:"Gd", a:64}, {n:"Terbium", s:"Tb", a:65}, {n:"Dysprosium", s:"Dy", a:66}, {n:"Holmium", s:"Ho", a:67}, {n:"Erbium", s:"Er", a:68}, {n:"Thulium", s:"Tm", a:69}, {n:"Ytterbium", s:"Yb", a:70},
+        {n:"Lutetium", s:"Lu", a:71}, {n:"Hafnium", s:"Hf", a:72}, {n:"Tantalum", s:"Ta", a:73}, {n:"Tungsten", s:"W", a:74}, {n:"Rhenium", s:"Re", a:75}, {n:"Osmium", s:"Os", a:76}, {n:"Iridium", s:"Ir", a:77}, {n:"Platinum", s:"Pt", a:78}, {n:"Gold", s:"Au", a:79}, {n:"Mercury", s:"Hg", a:80},
+        {n:"Thallium", s:"Tl", a:81}, {n:"Lead", s:"Pb", a:82}, {n:"Bismuth", s:"Bi", a:83}, {n:"Polonium", s:"Po", a:84}, {n:"Astatine", s:"At", a:85}, {n:"Radon", s:"Rn", a:86}, {n:"Francium", s:"Fr", a:87}, {n:"Radium", s:"Ra", a:88}, {n:"Actinium", s:"Ac", a:89}, {n:"Thorium", s:"Th", a:90},
+        {n:"Protactinium", s:"Pa", a:91}, {n:"Uranium", s:"U", a:92}, {n:"Neptunium", s:"Np", a:93}, {n:"Plutonium", s:"Pu", a:94}, {n:"Americium", s:"Am", a:95}, {n:"Curium", s:"Cm", a:96}, {n:"Berkelium", s:"Bk", a:97}, {n:"Californium", s:"Cf", a:98}, {n:"Einsteinium", s:"Es", a:99}, {n:"Fermium", s:"Fm", a:100},
+        {n:"Mendelevium", s:"Md", a:101}, {n:"Nobelium", s:"No", a:102}, {n:"Lawrencium", s:"Lr", a:103}, {n:"Rutherfordium", s:"Rf", a:104}, {n:"Dubnium", s:"Db", a:105}, {n:"Seaborgium", s:"Sg", a:106}, {n:"Bohrium", s:"Bh", a:107}, {n:"Hassium", s:"Hs", a:108}, {n:"Meitnerium", s:"Mt", a:109}, {n:"Darmstadtium", s:"Ds", a:110},
+        {n:"Roentgenium", s:"Rg", a:111}, {n:"Copernicium", s:"Cn", a:112}, {n:"Nihonium", s:"Nh", a:113}, {n:"Flerovium", s:"Fl", a:114}, {n:"Moscovium", s:"Mc", a:115}, {n:"Livermorium", s:"Lv", a:116}, {n:"Tennessine", s:"Ts", a:117}, {n:"Oganesson", s:"Og", a:118}
+    ];
+
+    let currentQ = null;
+    let quizHistory = [];
+
+    function generateQuestion() {
+        const el = elements[Math.floor(Math.random() * elements.length)];
+        const isSymbol = Math.random() > 0.5;
+        const correctVal = isSymbol ? el.s : el.a;
+        
+        // Generate 3 wrong options
+        let distractors = [];
+        while(distractors.length < 3) {
+            let rand = elements[Math.floor(Math.random() * elements.length)];
+            let val = isSymbol ? rand.s : rand.a;
+            if (val !== correctVal && !distractors.includes(val)) distractors.push(val);
+        }
+
+        const options = [correctVal, ...distractors].sort(() => Math.random() - 0.5);
+        
+        currentQ = {
+            text: isSymbol ? `What is the symbol for ${el.n}?` : `What is the atomic number of ${el.n}?`,
+            correct: correctVal,
+            elementName: el.n
+        };
+
+        document.getElementById('question').innerText = currentQ.text;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        options.forEach(opt => {
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            label.innerHTML = `<input type="radio" name="quiz-opt" value="${opt}"> <span>${opt}</span>`;
+            container.appendChild(label);
+        });
+    }
+
+    function saveAnswer() {
+        const selected = document.querySelector('input[name="quiz-opt"]:checked');
+        const userVal = selected ? selected.value : "Skipped";
+        quizHistory.push({
+            name: currentQ.elementName,
+            user: userVal,
+            correct: currentQ.correct,
+            isRight: userVal == currentQ.correct
+        });
+    }
+
+    function handleNext() {
+        const selected = document.querySelector('input[name="quiz-opt"]:checked');
+        if(!selected) return alert("Please select an answer!");
+        saveAnswer();
+        generateQuestion();
+    }
+
+    function handleEnd() {
+        saveAnswer();
+        document.getElementById('quiz-box').classList.add('hidden');
+        document.getElementById('result-box').classList.remove('hidden');
+        
+        const body = document.getElementById('table-body');
+        let score = 0;
+        
+        quizHistory.forEach(item => {
+            if(item.isRight) score++;
+            const row = `<tr>
+                <td>${item.name}</td>
+                <td class="${item.isRight ? 'res-correct' : 'res-wrong'}">${item.user}</td>
+                <td>${item.correct}</td>
+            </tr>`;
+            body.innerHTML += row;
+        });
+
+        document.getElementById('score-text').innerText = `Final Score: ${score} / ${quizHistory.length}`;
+    }
+
+    generateQuestion();
+</script>
+
+</body>
+</html>
